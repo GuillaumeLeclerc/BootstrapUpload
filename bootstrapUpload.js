@@ -1,43 +1,35 @@
 (function( $ ){
 
-	$.fn.bootstrapUpload = function(settings) {		
-		var targetedItem = $(this);
+	$.fn.bootstrapUpload = function() {		
 
-		settings = settings?settings:{};
+		$(this).each(function(){
+			var targetedItem = $(this);
 
-		//------- SETTINGS ------------
-		if(!settings.text)
-		{
-			settings.text = "Browse";
-		}
-		if(!settings.size)
-		{
-			settings.size = 2;
-		}
-		//-----------------------------
+			if($(this).get(0).tagName == 'INPUT' && $(this).attr('type').toLowerCase() == 'file')
+			{
+				$(this).css('display' , 'none');
 
-		if($(this).tagName == 'input' && $(this).attr('type') == 'file')
-		{
-			$(this).style('display' , 'none');
+				var mainContainer = $(document.createElement('DIV')).addClass('input-append');
 
-			var mainContainer = $(document.createElement('DIV')).addClass('input-append');
+				var buttonBrowse = $(document.createElement('BUTTON')).addClass('btn').attr('type' , 'button').text(targetedItem.attr('text')).click(function() {
+					targetedItem.click();
+				});
 
-			var buttonBrowse = $(document.createElement('BUTTON')).addClass('btn').attr('type' , 'button').text(buttonText).click(function() {
-				targetedItem.click();
-			});
-
-			var displayTextbox = $(document.createElement('INPUT')).addClass('span'+settings.size).attr('type' , 'text');
+				var displayTextbox = $(document.createElement('INPUT')).attr('disabled' , 'disabled').addClass(targetedItem.attr('class')).attr('type' , 'text');
 
 
-			targetedItem.change(function(){
-				displayTextbox.attr('value' , targetedItem.value);
-			});
+				targetedItem.change(function(){
+					var toto = targetedItem;
+					console.log(targetedItem.attr('value'));
+					displayTextbox.attr('value' , targetedItem.get(0).value);
+				});
 
-			mainContainer.append(buttonBrowse);
-			mainContainer.append(displayTextbox);
-			mainContainer.insertBefore(targetedItem);
-		}
+				mainContainer.append(displayTextbox);
+				mainContainer.append(buttonBrowse);				
+				mainContainer.insertBefore(targetedItem);
+			}
+		});
 
-		return targetedItem;
+		return this;
 	};
 })( jQuery );
